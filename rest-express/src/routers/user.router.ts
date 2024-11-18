@@ -1,26 +1,38 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import { UserController } from "../controllers/user.controller";
+import { UserMiddleware } from "../middlewares/user.middleware";
 
 export class UserRouter {
   private router: Router;
   private userController: UserController;
+  private userMiddleware: UserMiddleware;
+
   constructor() {
     this.userController = new UserController();
+    this.userMiddleware = new UserMiddleware();
     this.router = Router();
-    this.initializeRoutes();
+    this.initalizeRoutes();
   }
 
-  private initializeRoutes() {
+  private initalizeRoutes() {
     this.router.get("/", this.userController.getUsers);
-    this.router.get("/:id", this.userController.getUserId);
     this.router.post("/", this.userController.addUser);
-  }
 
-  private updateUser(req: Request, res: Response) {
-    const { name } = req.body;
-    if (!name) {
-      return res.status(400).send({ error: "Name is required" });
-    }
+    this.router.get(
+      "/:id",
+      this.userMiddleware.checkId,
+      this.userController.getUserId
+    );
+    this.router.patch(
+      "/:id",
+      this.userMiddleware.checkId,
+      this.userController.updateUser
+    );
+    this.router.delete(
+      "/:id",
+      this.userMiddleware.checkId,
+      this.userController.deleteUser
+    );
   }
 
   getRouter(): Router {
