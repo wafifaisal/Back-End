@@ -31,7 +31,7 @@ export class UserController {
     const users: IUser[] = JSON.parse(
       fs.readFileSync("./db/user.json", "utf-8")
     );
-    const id = Math.max(...users.map((item) => item.id)) + 1;
+    const id = Math.max(...users.map((item) => item.id)) + 1 || 1;
 
     const { name, email, password } = req.body;
     const newData: IUser = { id, name, email, password };
