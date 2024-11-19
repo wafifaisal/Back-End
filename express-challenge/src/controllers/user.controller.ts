@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import fs from "fs";
 import { IEntries } from "../types/user";
+import { title } from "process";
 
 export class UserController {
   getUsers(req: Request, res: Response) {
@@ -13,6 +14,11 @@ export class UserController {
       if (category) {
         isValid = isValid && item.category == category;
       }
+
+      if (title) {
+        isValid = isValid && item.title.toLowerCase().includes(title as string);
+      }
+
       if (start && end) {
         const startDate = new Date(start as string);
         const endDate = new Date(end as string);
