@@ -4,10 +4,23 @@ import { IEntries } from "../types/user";
 
 export class UserController {
   getUsers(req: Request, res: Response) {
-    const { type } = req.query;
+    const { type, category, start, end } = req.query;
     let entries: IEntries[] = JSON.parse(
       fs.readFileSync("./db/entries.json", "utf-8")
     );
+    entries = entries.filter((item) => {
+      let isValid: boolean = true;
+      if (category) {
+        isValid = isValid && item.category == category;
+      }
+      if (start && end) {
+        const startDate = new Date(start as string);
+        const endDate = new Date(end as string);
+        const entriesDate = new Date(item.date);
+        isValid = isValid && entriesDate >= startDate && entriesDate <= endDate;
+      }
+      return isValid;
+    });
     if (type) {
       entries = entries.filter((item) =>
         item.type.toLowerCase().includes(type as string)
