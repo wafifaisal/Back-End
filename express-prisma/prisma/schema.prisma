@@ -15,14 +15,23 @@ enum BlogCategory {
   Tech
 }
 
+enum RoleUser {
+  User
+  Admin
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  avatar    String? // ? artinya boleh null
+  id           Int     @id @default(autoincrement())
+  username     String  @unique
+  email        String  @unique
+  password     String
+  avatar       String? // ? artinya boleh null
+  loginAttempt Int     @default(0)
+
   createdAt DateTime @default(now())
+  isSuspend Boolean  @default(false)
   updatedAt DateTime @updatedAt
+  role      RoleUser @default(User)
   Blog      Blog[]
 }
 
@@ -31,7 +40,7 @@ model Blog {
   title     String       @unique
   slug      String       @unique
   category  BlogCategory
-  content   String       @db.Text
+  content   Json
   thumbnail String
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt

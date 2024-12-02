@@ -4,10 +4,10 @@ import { Prisma } from "@prisma/client";
 
 export class UserController {
   async getUsers(req: Request, res: Response) {
-    const { search, page = 1, limit = 5 } = req.query;
-
-    const filter: Prisma.UserWhereInput = {};
     try {
+      console.log(req.user);
+      const { search, page = 1, limit = 5 } = req.query;
+      const filter: Prisma.UserWhereInput = {};
       interface Filter {
         username?: string;
         email?: string;
@@ -36,8 +36,9 @@ export class UserController {
   }
   async getUserId(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const user = await prisma.user.findUnique({ where: { id: +id } });
+      const user = await prisma.user.findUnique({
+        where: { id: req.user?.id },
+      });
       res.status(200).send({ user });
     } catch (err) {
       console.log(err);
