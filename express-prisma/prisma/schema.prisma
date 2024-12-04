@@ -21,18 +21,18 @@ enum RoleUser {
 }
 
 model User {
-  id           Int     @id @default(autoincrement())
-  username     String  @unique
-  email        String  @unique
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  email        String   @unique
   password     String
   avatar       String? // ? artinya boleh null
-  loginAttempt Int     @default(0)
-
-  createdAt DateTime @default(now())
-  isSuspend Boolean  @default(false)
-  updatedAt DateTime @updatedAt
-  role      RoleUser @default(User)
-  Blog      Blog[]
+  loginAttempt Int      @default(0)
+  createdAt    DateTime @default(now())
+  isSuspend    Boolean  @default(false)
+  isVerify     Boolean  @default(false)
+  updatedAt    DateTime @updatedAt
+  role         RoleUser @default(User)
+  Blog         Blog[]
 }
 
 model Blog {
